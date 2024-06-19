@@ -9,6 +9,10 @@ const port = 3000;
 app.set("view engine", "pug");
 app.set("views", "./views");
 
+//carpeta publica
+app.use(express.static("public"));
+
+//router
 app.use("/auth", usuarioRoutes);
 
 app.listen(port, () => {
