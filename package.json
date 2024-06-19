@@ -5,6 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "node index.js",
+    "nodemon": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -14,6 +16,7 @@
   "author": "Argiro <elto.82@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "4.19.2"
+    "express": "4.19.2",
+    "pug": "3.0.3"
   }
 }
