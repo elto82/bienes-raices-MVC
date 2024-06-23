@@ -16,6 +16,7 @@
   "author": "Argiro <elto.82@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "16.4.5",
     "express": "4.19.2",
     "mysql2": "3.10.1",
     "pug": "3.0.3",
