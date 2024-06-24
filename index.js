@@ -3,11 +3,15 @@ import usuarioRoutes from "./routes/usuarioRoutes.js";
 import db from "./config/db.js";
 
 const app = express();
+
+//habilitar datos de formularios
+app.use(express.urlencoded({ extended: true }));
 const port = 3000;
 
 //conexion a base de datos
 try {
   await db.authenticate();
+  db.sync();
   console.log("Base de datos conectada");
 } catch (error) {
   console.log(`Error al conectar la base de datos ${error}`);

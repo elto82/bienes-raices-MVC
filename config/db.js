@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 
 const db = new Sequelize(
-  process.env.DB_NOMBRE,
+  process.env.BD_NOMBRE,
   process.env.BD_USER,
   process.env.BD_PASS ?? "",
   {
