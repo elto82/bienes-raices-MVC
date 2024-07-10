@@ -6,27 +6,33 @@ const app = express();
 
 //habilitar datos de formularios
 app.use(express.urlencoded({ extended: true }));
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 //conexion a base de datos
-try {
-  await db.authenticate();
-  db.sync();
-  console.log("Base de datos conectada");
-} catch (error) {
-  console.log(`Error al conectar la base de datos ${error}`);
-}
+const startServer = async () => {
+  try {
+    await db.authenticate();
+    await db.sync(); // Asegúrate de que las tablas se crean aquí
+    console.log("Base de datos conectada");
 
-//habilitar pug
+    // Iniciar el servidor después de sincronizar la base de datos
+    app.listen(port, () => {
+      console.log(`Server is running on localhost://${port}`);
+    });
+  } catch (error) {
+    console.log(`Error al conectar la base de datos: ${error}`);
+  }
+};
+
+// Habilitar pug
 app.set("view engine", "pug");
 app.set("views", "./views");
 
-//carpeta publica
+// Carpeta pública
 app.use(express.static("public"));
 
-//router
+// Router
 app.use("/auth", usuarioRoutes);
 
-app.listen(port, () => {
-  console.log(`Server is running on localhost://${port}`);
-});
+// Iniciar el servidor
+startServer();
