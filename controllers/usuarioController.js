@@ -1,12 +1,13 @@
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import Usuario from "../models/Usuario.js";
-import { generarId } from "../helpers/tokens.js";
+import { generarId, generarJWT } from "../helpers/tokens.js";
 import { emailRegistro, emailOlvidePassword } from "../helpers/emails.js";
 
 const formularioLogin = (req, res) => {
   res.render("auth/login", {
     pagina: "Iniciar Sesión",
+    csrfToken: req.csrfToken(),
   });
 };
 
@@ -230,6 +231,72 @@ const nuevoPassword = async (req, res) => {
     mensaje: "Tu password se ha reestablecido correctamente",
   });
 };
+
+const autenticar = async (req, res) => {
+  //validacion
+  await check("email")
+    .isEmail()
+    .withMessage("El email es obligatorio")
+    .run(req);
+  await check("password")
+    .notEmpty()
+    .withMessage("El password es obligatorio")
+    .run(req);
+
+  let resultado = validationResult(req);
+
+  if (!resultado.isEmpty()) {
+    return res.render("auth/login", {
+      pagina: "Iniciar Sesion",
+      csrfToken: req.csrfToken(),
+      errores: resultado.array(),
+    });
+  }
+
+  //Verificar si el usuario existe
+  const { email, password } = req.body;
+  const usuario = await Usuario.findOne({ where: { email } });
+
+  if (!usuario) {
+    return res.render("auth/login", {
+      pagina: "Iniciar Sesion",
+      csrfToken: req.csrfToken(),
+      errores: [{ msg: "El usuario no existe" }],
+    });
+  }
+
+  //comprobar si el usuario esta confirmado
+  if (!usuario.confirmado) {
+    return res.render("auth/login", {
+      pagina: "Iniciar Sesion",
+      csrfToken: req.csrfToken(),
+      errores: [{ msg: "Tú cuenta no ha sido confirmada" }],
+    });
+  }
+
+  //Revisar el password
+  if (!usuario.verificarPassword(password)) {
+    return res.render("auth/login", {
+      pagina: "Iniciar Sesion",
+      csrfToken: req.csrfToken(),
+      errores: [{ msg: "Password Incorrecto" }],
+    });
+  }
+
+  //Autenticar al usuario
+  const token = generarJWT(usuario.id);
+  console.log(token);
+
+  //Almacenar el token en una cookie
+  return res
+    .cookie("_token", token, {
+      httpOnly: true,
+      //secure: true,
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+    })
+    .redirect("/misPropiedades");
+};
+
 export {
   formularioLogin,
   formularioRegistro,
@@ -239,4 +306,5 @@ export {
   resetPassword,
   comprobarToken,
   nuevoPassword,
+  autenticar,
 };
