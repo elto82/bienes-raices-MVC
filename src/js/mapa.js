@@ -1,14 +1,46 @@
 (function () {
-  const lat = 6.2493266;
-  const lng = -75.5679984;
+  const lat = document.querySelector("#lat").value || 6.2493266;
+  const lng = document.querySelector("#lng").value || -75.5679984;
   const mapa = L.map("mapa").setView([lat, lng], 13);
+  let marker;
 
-  //6.2493266,-75.5679984,3a,75y,322.45h,75.2t/
+  const geocodeService = L.esri.Geocoding.geocodeService();
 
   https: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(mapa);
+  //el pin
+  marker = new L.marker([lat, lng], {
+    draggable: true,
+    autoPan: true,
+  }).addTo(mapa);
+
+  //cuando el marker este arrastrado
+  marker.on("moveend", function (e) {
+    marker = e.target;
+    const position = marker.getLatLng();
+    mapa.panTo(new L.LatLng(position.lat, position.lng));
+
+    //obtener la inf de las calles al soltar el marker
+    geocodeService
+      .reverse()
+      .latlng(position, 16)
+      .run(function (error, result) {
+        // console.log(result);
+        if (error) {
+          return;
+        }
+        marker.bindPopup(result.address.LongLabel).openPopup();
+
+        //llenar los campos
+        document.querySelector(".calle").textContent =
+          result?.address?.Address ?? "";
+        document.querySelector("#calle").value = result?.address?.Address ?? "";
+        document.querySelector("#lat").value = result?.latlng?.lat ?? "";
+        document.querySelector("#lng").value = result?.latlng?.lng ?? "";
+      });
+  });
 })();
 
 if (navigator.geolocation) {
