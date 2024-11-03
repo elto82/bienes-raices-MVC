@@ -60,6 +60,9 @@ const guardar = async (req, res) => {
     precio: precioId,
     categoria: categoriaId,
   } = req.body;
+
+  const { id: usuarioId } = req.usuario;
+
   try {
     const propiedad = await Propiedad.create({
       titulo,
@@ -72,7 +75,12 @@ const guardar = async (req, res) => {
       lng,
       precioId,
       categoriaId,
+      usuarioId,
+      imagen: "",
     });
+    const { id } = propiedad;
+
+    res.redirect(`/propiedades/agregar-imagen/${id}`);
   } catch (error) {
     console.log(error);
   }
