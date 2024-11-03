@@ -28,6 +28,19 @@ const Usuario = db.define(
         usuario.confirmado = false;
       },
     },
+    scopes: {
+      eliminarPassword: {
+        attributes: {
+          exclude: [
+            "password",
+            "confirmado",
+            "token",
+            "createdAt",
+            "updatedAt",
+          ],
+        },
+      },
+    },
   }
 );
 
