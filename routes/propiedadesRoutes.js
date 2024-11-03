@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import { admin, crear, guardar } from "../controllers/propiedadCortroller.js";
+import protegerRuta from "../middleware/protegerRuta.js";
 
 const router = Router();
 
-router.get("/misPropiedades", admin);
+router.get("/misPropiedades", protegerRuta, admin);
 router.get("/propiedades/crear", crear);
 router.post(
   "/propiedades/crear",
