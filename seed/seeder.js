@@ -16,6 +16,7 @@ const importarDatos = async () => {
     // await Categoria.bulkCreate(categorias);
     // await Precio.bulkCreate(precios);
 
+    //insertar los datos
     await Promise.all([
       Categoria.bulkCreate(categorias),
       Precio.bulkCreate(precios),

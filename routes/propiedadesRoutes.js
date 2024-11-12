@@ -7,6 +7,7 @@ import {
   guardar,
 } from "../controllers/propiedadCortroller.js";
 import protegerRuta from "../middleware/protegerRuta.js";
+import upload from "../middleware/subirImagen.js";
 
 const router = Router();
 
@@ -36,5 +37,11 @@ router.post(
 );
 
 router.get("/propiedades/agregar-imagen/:id", protegerRuta, agregarImagen);
+
+router.post(
+  "/propiedades/agregar-imagen/:id",
+  // upload.array;
+  upload.single("imagen")
+);
 
 export default router;

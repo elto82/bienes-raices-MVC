@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import { Precio, Categoria, Propiedad } from "../models/index.js";
+import { Precio, Categoria, Propiedad, Usuario } from "../models/index.js";
 
 const admin = (req, res) => {
   res.render("propiedades/admin", {
@@ -95,13 +95,15 @@ const agregarImagen = async (req, res) => {
     return res.redirect("/misPropiedades");
   }
   //validar que la propiedad pertenece a quien visita esta pagina
-  // console.log(req.usuario);
+  // console.log(req.usuario.id );
+  // console.log(propiedad.usuarioId);
   if (req.usuario.id.toString() !== propiedad.usuarioId.toString()) {
     return res.redirect("/misPropiedades");
   }
 
   res.render("propiedades/agregar-imagen", {
-    pagina: "Agregar Imagen",
+    pagina: `Agregar Imagen: ${propiedad.titulo}`,
+    propiedad,
     csrfToken: req.csrfToken(),
   });
 };
