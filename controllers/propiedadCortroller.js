@@ -3,29 +3,61 @@ import { Precio, Categoria, Propiedad } from "../models/index.js";
 import { unlink } from "node:fs/promises";
 
 const admin = async (req, res) => {
-  const { id } = req.usuario;
-  const propiedades = await Propiedad.findAll({
-    where: {
-      usuarioId: id,
-    },
-    include: [
-      {
-        model: Categoria,
-        as: "categoria",
-      },
-      {
-        model: Precio,
-        as: "precio",
-      },
-    ],
-  });
-  // console.log(propiedades);
+  //leer querystring
+  const { pagina: paginaActual } = req.query;
 
-  res.render("propiedades/admin", {
-    pagina: "Mis propiedades",
-    propiedades,
-    csrfToken: req.csrfToken(),
-  });
+  const expresion = /^[1-9]$/;
+
+  if (!expresion.test(paginaActual)) {
+    return res.redirect("/misPropiedades?pagina=1");
+  }
+
+  try {
+    const { id } = req.usuario;
+    //limites y offset para el paginador
+    const limit = 4;
+    const offset = paginaActual * limit - limit;
+
+    const [propiedades, total] = await Promise.all([
+      Propiedad.findAll({
+        limit: limit, //limites
+        offset: offset, //offset
+        where: {
+          usuarioId: id,
+        },
+        include: [
+          {
+            model: Categoria,
+            as: "categoria",
+          },
+          {
+            model: Precio,
+            as: "precio",
+          },
+        ],
+      }),
+      Propiedad.count({
+        where: {
+          usuarioId: id,
+        },
+      }),
+    ]);
+    // console.log(propiedades);
+    // console.log(total);
+
+    res.render("propiedades/admin", {
+      pagina: "Mis propiedades",
+      propiedades,
+      csrfToken: req.csrfToken(),
+      paginas: Math.ceil(total / limit),
+      paginaActual: Number(paginaActual),
+      total,
+      offset,
+      limit,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 //formulario para crear una nueva propiedad
