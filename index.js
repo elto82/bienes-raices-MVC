@@ -2,6 +2,7 @@ import express from "express";
 import csrf from "csurf";
 import cookieParser from "cookie-parser";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
+import appRoutes from "./routes/appRoutes.js";
 import propiedadesRoutes from "./routes/propiedadesRoutes.js";
 import db from "./config/db.js";
 
@@ -43,6 +44,7 @@ app.set("views", "./views");
 app.use(express.static("public"));
 
 // Router
+app.use("/", appRoutes);
 app.use("/auth", usuarioRoutes);
 app.use("/", propiedadesRoutes);
 
