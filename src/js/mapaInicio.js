@@ -44,6 +44,9 @@
   };
 
   const mostrarPropiedades = (propiedades) => {
+    //limpiar markers previos
+    markers.clearLayers();
+
     propiedades.forEach((propiedad) => {
       const marker = new L.marker([propiedad?.lat, propiedad?.lng], {
         autoPan: true,
@@ -63,7 +66,7 @@
     const resultado = propiedades
       .filter(filtrarCategoria)
       .filter(filtrarPrecio);
-    console.log(resultado);
+    mostrarPropiedades(resultado);
   };
 
   const filtrarCategoria = (propiedad) => {
