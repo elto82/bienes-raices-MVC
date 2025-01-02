@@ -28,20 +28,15 @@ block  contenido
       h2(class="text-center text-4xl font-extrabold pt-10") Casas en venta
       
       div(class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-12")
-        each casa in casas
-          div(class="bg-white shadow rounded-lg")
-            img(class="object-cover h-72 w-full" src=`/uploads/${casa.imagen}` alt=`imagen casa ${casa.titulo}`)
-            div(class="p-5 space-y-2")
-              h3(class="text-2xl font-bold")= casa.titulo
-              p(class="text-sm to-gray-600") Habitaciones: 
-                span(class="to-gray-800 font-bold")= casa.habitaciones
-              p(class="text-sm to-gray-600") WC: 
-                span(class="to-gray-800 font-bold")= casa.wc
-              p(class="text-sm to-gray-600") PRECIO:  
-                span(class="to-gray-800 font-bold")= casa.precio.nombre
-              a(href=`/propiedad/${casa.id}` class="bg-indigo-600 w-full text-center block font-bold to-white p-2 uppercase rounded") Ver Propiedad
+        each propiedad in casas
+          include ./templates/card
 
-
+    section(class="gap-y-5")
+      h2(class="text-center text-4xl font-extrabold pt-10") Departamentos en venta
+      
+      div(class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-12")
+        each propiedad in departamentos
+          include ./templates/card
 block scripts
     script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
     script(src="/js/mapaInicio.js")
