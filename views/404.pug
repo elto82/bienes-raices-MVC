@@ -1,0 +1,13 @@
+extends ./layout/app
+
+block contenido
+  div(class="py-10 flex flex-col items-center justify-center text-center space-y-8")
+    h2(class="text-6xl font-extrabold text-red-500") 404
+    h3(class="text-2xl font-bold text-gray-700") ¡Oops! Parece que llegaste a un lugar desconocido.
+    p(class="text-lg text-gray-600") 
+      | Esta página decidió tomarse unas vacaciones. 
+      br
+      | Pero no te preocupes, el resto del sitio sigue funcionando.
+    div(class="text-sm text-gray-500 italic") 
+      | *Si ves a esta página, dile que regrese.*
+    a(class="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded-lg" href="/") Volver al inicio

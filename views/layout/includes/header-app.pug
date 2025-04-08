@@ -1,7 +1,8 @@
 header.bg-indigo-600.p-4
   .container.mx-auto.flex.justify-between.items-center
-    h1.text-2xl.text-white.font-extrabold.text-center Bienes 
-      span.font-normal Raices 
+    a(href="/") 
+      h1.text-2xl.text-white.font-extrabold.text-center Bienes 
+        span.font-normal Raices 
 
     nav(class="my-2 text-sm md:flex md:items-center md:gap-3 font-bold text-white hidden")
       a(href="/auth/registro") Crear Cuenta
@@ -9,16 +10,20 @@ header.bg-indigo-600.p-4
 
 div(class="bg-indigo-700 py-5 hidden lg:block")
   div(class="container mx-auto flex justify-between")
-    a(href="/categorias/1" class="text-sm font-bold uppercase text-white") Casa
-    a(href="/categorias/2" class="text-sm font-bold uppercase text-white") Departamento
-    a(href="/categorias/3" class="text-sm font-bold uppercase text-white") Bodega
-    a(href="/categorias/4" class="text-sm font-bold uppercase text-white") Cabaña
-    a(href="/categorias/5" class="text-sm font-bold uppercase text-white") Terreno
-    a(href="/categorias/6" class="text-sm font-bold uppercase text-white") Local
-    a(href="/categorias/7" class="text-sm font-bold uppercase text-white") Oficina
-    a(href="/categorias/8" class="text-sm font-bold uppercase text-white") Galpón
-    a(href="/categorias/9" class="text-sm font-bold uppercase text-white") Quinta
-    a(href="/categorias/10" class="text-sm font-bold uppercase text-white") Rancho
-    a(href="/categorias/11" class="text-sm font-bold uppercase text-white") Edificio
-    a(href="/categorias/12" class="text-sm font-bold uppercase text-white") Cochera
-    a(href="/categorias/13" class="text-sm font-bold uppercase text-white") Lote
+    nav(class="flex gap-4 items-center")
+      a(href="/categorias/1" class="text-sm font-bold uppercase text-white") Casa
+      a(href="/categorias/2" class="text-sm font-bold uppercase text-white") Departamento
+      a(href="/categorias/3" class="text-sm font-bold uppercase text-white") Bodega
+      a(href="/categorias/4" class="text-sm font-bold uppercase text-white") Cabaña
+      a(href="/categorias/5" class="text-sm font-bold uppercase text-white") Terreno
+      a(href="/categorias/6" class="text-sm font-bold uppercase text-white") Local
+      a(href="/categorias/7" class="text-sm font-bold uppercase text-white") Oficina
+      a(href="/categorias/11" class="text-sm font-bold uppercase text-white") Edificio
+      a(href="/categorias/13" class="text-sm font-bold uppercase text-white") Lote
+
+    form(action="/buscador" method="POST" class="flex gap-3 items-center")
+      input(type="hidden" name="_csrf" value=csrfToken)
+      label(for="termino" class="text-sm uppercase font-bold to-white") Búsqueda
+      input(type="text" id="termino" name="termino" placeholder="Buscar Propiedades" class="p-2 rounded-lg shadow text-sm")
+
+      input(type="submit" class="bg-indigo-800 hover:bg-indigo-400 rounded-lg text-white uppercase font-bold p-2 cursor-pointer text-sm" value="Buscar")
